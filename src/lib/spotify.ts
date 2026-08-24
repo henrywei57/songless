@@ -164,6 +164,13 @@ async function spotifyFetch(path: string): Promise<any> {
   const token = await getValidToken();
   if (!token) throw new Error("Not logged in to Spotify");
   const res = await fetch(`${API_BASE}${path}`, { headers: { Authorization: `Bearer ${token}` } });
+  if (res.status === 403) {
+    throw new Error(
+      "Spotify blocked this request (403). Your app is likely still in Development Mode, which only " +
+        "allows API access for accounts added under Settings → User Management in your Spotify app " +
+        "dashboard. Add the Spotify account you're logging in with there, then try connecting again.",
+    );
+  }
   if (!res.ok) throw new Error(`Spotify API error: ${res.status}`);
   return res.json();
 }

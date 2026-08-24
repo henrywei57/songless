@@ -56,8 +56,13 @@ yourself (free, takes a minute):
    `https://henrywei57.github.io/songless/` on the deployed site. The app shows you
    the exact value to paste in.
 3. Copy the app's **Client ID** and paste it into Songless when prompted.
+4. New Spotify apps start in **Development Mode**, which only allows API access for
+   accounts explicitly added to the app. In the dashboard, go to your app → Settings
+   → **User Management** and add the Spotify account(s) you'll log in with (by the
+   email on that Spotify account). Without this step, login succeeds but playlist
+   requests fail with a 403.
 
-That's it — no client secret is ever needed or requested.
+No client secret is ever needed or requested — everything runs client-side.
 
 ## Tech
 

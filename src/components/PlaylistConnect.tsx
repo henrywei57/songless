@@ -167,7 +167,11 @@ export default function PlaylistConnect({ onPick, onBack }: Props) {
         </div>
       )}
 
-      {error && <div className="text-sm text-bad">{error}</div>}
+      {error && (
+        <div className="w-full rounded-xl border border-bad/40 bg-bad/10 p-4 text-left text-sm text-bad">
+          {error}
+        </div>
+      )}
     </div>
   );
 }
