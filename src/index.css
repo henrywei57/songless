@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
+  --color-bg: #0b0c10;
+  --color-surface: #15171e;
+  --color-surface-2: #1c1f29;
+  --color-border: #2a2d38;
+  --color-accent: #7c5cff;
+  --color-accent-2: #ff5ca8;
+  --color-good: #22c55e;
+  --color-bad: #ef4444;
+  --color-warn: #eab308;
+  --color-text: #e7e8ec;
+  --color-text-dim: #9096a8;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(1200px 600px at 50% -10%, #201a3d 0%, var(--color-bg) 55%);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: white;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 8px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(124, 92, 255, 0.55);
+  }
+  100% {
+    box-shadow: 0 0 0 18px rgba(124, 92, 255, 0);
+  }
+}
+.play-pulse {
+  animation: pulse-ring 1.4s ease-out infinite;
+}
