@@ -46,8 +46,14 @@ export function setClientId(id: string): void {
   writeJSON("spotify-client-id", id.trim());
 }
 
+/**
+ * Always the origin + the app's configured base path (e.g. https://host/songless/),
+ * regardless of the exact URL the page was loaded with (trailing slash, query
+ * string, etc.) — Spotify requires this to match the registered Redirect URI
+ * byte-for-byte, so it must not depend on window.location.pathname.
+ */
 export function getRedirectUri(): string {
-  return window.location.origin + window.location.pathname;
+  return window.location.origin + import.meta.env.BASE_URL;
 }
 
 export async function beginLogin(): Promise<void> {

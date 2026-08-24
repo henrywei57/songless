@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
+import RedirectUriBox from "./RedirectUriBox";
 import {
   beginLogin,
   fetchMyPlaylists,
   fetchPlaylistTracks,
   getClientId,
-  getRedirectUri,
   isLoggedIn,
   logout,
   setClientId,
@@ -84,11 +84,9 @@ export default function PlaylistConnect({ onPick, onBack }: Props) {
             To play from your own playlists, create a free app at{" "}
             <span className="text-text">developer.spotify.com/dashboard</span> and paste its{" "}
             <strong className="text-text">Client ID</strong> below. Add this exact Redirect URI to the app's
-            settings:
+            settings (use the copy button — it must match byte-for-byte, including the trailing slash):
           </p>
-          <code className="scrollbar-thin overflow-x-auto rounded-lg bg-surface-2 px-3 py-2 text-xs text-accent">
-            {getRedirectUri()}
-          </code>
+          <RedirectUriBox />
           <input
             value={clientIdInput}
             onChange={(e) => setClientIdInput(e.target.value)}
@@ -110,13 +108,23 @@ export default function PlaylistConnect({ onPick, onBack }: Props) {
       )}
 
       {savedClientId && !loggedIn && (
-        <div className="flex w-full flex-col items-center gap-3">
+        <div className="flex w-full flex-col items-center gap-4">
           <button
             onClick={connect}
             className="flex items-center gap-2 rounded-lg bg-[#1DB954] px-5 py-3 text-sm font-semibold text-black transition hover:opacity-90"
           >
             Connect Spotify
           </button>
+
+          <div className="flex w-full flex-col gap-2 rounded-xl border border-border bg-surface p-4 text-left text-sm">
+            <p className="text-text-dim">
+              Getting "redirect_uri: Not matching configuration"? Your Spotify app's Redirect URIs must contain
+              this exact value, including the trailing slash — re-copy and re-paste it in{" "}
+              <span className="text-text">developer.spotify.com/dashboard</span> → your app → Settings:
+            </p>
+            <RedirectUriBox />
+          </div>
+
           <button onClick={() => setSavedClientId("")} className="text-xs text-text-dim hover:text-text">
             Use a different Client ID
           </button>
