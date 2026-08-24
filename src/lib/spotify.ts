@@ -3,7 +3,7 @@ import { readJSON, writeJSON, removeKey } from "./storage";
 const AUTHORIZE_URL = "https://accounts.spotify.com/authorize";
 const TOKEN_URL = "https://accounts.spotify.com/api/token";
 const API_BASE = "https://api.spotify.com/v1";
-const SCOPES = "playlist-read-private playlist-read-collaborative";
+const SCOPES = "playlist-read-private playlist-read-collaborative user-read-email";
 
 interface TokenBundle {
   accessToken: string;
@@ -21,6 +21,12 @@ export interface SpotifyPlaylistSummary {
 export interface SpotifyPlaylistTrack {
   name: string;
   artist: string;
+}
+
+export interface SpotifyProfile {
+  id: string;
+  displayName: string;
+  email?: string;
 }
 
 function base64UrlEncode(bytes: ArrayBuffer): string {
@@ -166,13 +172,21 @@ async function spotifyFetch(path: string): Promise<any> {
   const res = await fetch(`${API_BASE}${path}`, { headers: { Authorization: `Bearer ${token}` } });
   if (res.status === 403) {
     throw new Error(
-      "Spotify blocked this request (403). Your app is likely still in Development Mode, which only " +
-        "allows API access for accounts added under Settings → User Management in your Spotify app " +
-        "dashboard. Add the Spotify account you're logging in with there, then try connecting again.",
+      "Spotify blocked this request (403). Your app is likely still in Development Mode. Check: (1) " +
+        "Settings → User Management in your Spotify app dashboard lists the account below with status " +
+        "'Accepted', not 'Pending' — Spotify emails an invite that must be accepted, adding the email " +
+        "alone isn't enough; (2) it's the same app whose Client ID you pasted here, if you have more " +
+        "than one; (3) log out below and reconnect — permissions granted before you were added won't " +
+        "retroactively apply to an old session.",
     );
   }
   if (!res.ok) throw new Error(`Spotify API error: ${res.status}`);
   return res.json();
+}
+
+export async function fetchMe(): Promise<SpotifyProfile> {
+  const data = await spotifyFetch("/me");
+  return { id: data.id, displayName: data.display_name ?? data.id, email: data.email };
 }
 
 export async function fetchMyPlaylists(): Promise<SpotifyPlaylistSummary[]> {
